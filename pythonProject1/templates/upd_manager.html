@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ Менеджер {{menager_id}}
+{% endblock %}
+
+{% block body %}
+
+<h1>Редактирование менеджеров</h1>
+<form method="post">
+     <input value= "{{menager.fio_Manager}}" type="text" name="fio_Manager" placeholder="номер продавца" class="form-control">
+
+    <button class="button" type="submit"> изменить </button>
+
+</form>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Редактирование заказа {{ order.id_order }}
+{% endblock %}
+
+{% block body %}
+<h1>Редактирование заказа</h1>
+<form method="POST">
+
+    <!-- Выпадающий список для выбора менеджера -->
+    <select name="menager_id" class="form-control">
+        <option value="" disabled>Выберите менеджера</option>
+        {% for manager in managers %}
+            <option value="{{ manager.Menager_id }}" {% if manager.Menager_id == order.menager_id %} selected {% endif %}>
+                {{ manager.fio_Manager }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <!-- Поле для ФИО покупателя -->
+    <input value="{{ order.fio_buyer }}" type="text" name="fio_buyer" placeholder="ФИО покупателя" class="form-control" required>
+
+    <!-- Поле для телефона покупателя -->
+    <input value="{{ order.buyer_phone }}" type="number" name="buyer_phone" placeholder="Телефон покупателя" class="form-control" required>
+
+    <!-- Выпадающий список для выбора запчасти -->
+    <select name="id_equipment" class="form-control">
+        <option value="" {% if not order.id_equipment %} selected {% endif %}>Выберите айди запчасти (не обязательно)</option>
+        {% for equipment in equipments %}
+            <option value="{{ equipment.id_equipment }}" {% if equipment.id_equipment == order.id_equipment %} selected {% endif %}>
+                {{ equipment.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <!-- Выпадающий список для выбора техники -->
+    <select name="id_spare" class="form-control">
+        <option value="" {% if not order.id_spare %} selected {% endif %}>Выберите айди техники (не обязательно)</option>
+        {% for spare in spares %}
+            <option value="{{ spare.id_spare }}" {% if spare.id_spare == order.id_spare %} selected {% endif %}>
+                {{ spare.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <!-- Выпадающий список для статуса заказа -->
+    <select name="availability" class="form-control" required>
+        <option value="Выдан" {% if order.availability == 'Выдан' %} selected {% endif %}>Выдан</option>
+        <option value="Не выдан" {% if order.availability == 'Не выдан' %} selected {% endif %}>Не выдан</option>
+    </select>
+
+    <!-- Кнопка для отправки формы -->
+    <button class="button" type="submit">Изменить</button>
+</form>
+{% endblock %}

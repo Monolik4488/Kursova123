@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ паркинг {{parking_id}}
+{% endblock %}
+
+{% block body %}
+
+<h1>Редактирование ячейки</h1>
+<form method="post">
+    <input value= "{{parking.status}}" type="text" name="status" placeholder="статус" class="form-control">
+    <input value= "{{parking.id_equipment}}" type="number" name="id_equipment" placeholder="id техники" class="form-control">
+
+        <button class="button" type="submit"> изменить </button>
+
+</form>
+{% endblock %}
+

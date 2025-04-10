@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Редактирование запчасти {{ spare_parts.id_spare }}
+{% endblock %}
+
+{% block body %}
+<h1>Редактирование запчасти</h1>
+<form method="POST">
+
+
+
+    <!-- Количество единиц запчасти -->
+    <input value="{{ spare_parts.numder_units }}" type="number" name="numder_units" placeholder="Количество единиц" class="form-control">
+
+    <!-- Статус наличия -->
+    <select name="availability" class="form-control" required>
+        <option value="" disabled>Выберите статус</option>
+        {% for option in availability_options %}
+            <option value="{{ option }}" {% if option == spare_parts.availability %} selected {% endif %}>
+                {{ option }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <!-- Цена за единицу -->
+    <input value="{{ spare_parts.price_per_unit }}" type="number" step="0.01" name="price_per_unit" placeholder="Цена за единицу" class="form-control" required>
+
+    <!-- Название запчасти -->
+    <input value="{{ spare_parts.name }}" type="text" name="name" placeholder="Название запчасти" class="form-control" required>
+
+    <button class="button" type="submit">Изменить</button>
+</form>
+{% endblock %}

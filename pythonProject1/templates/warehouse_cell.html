@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+изменения ячеек
+{% endblock %}
+
+{% block content %}
+<h1> Добовление записи</h1>
+
+<form method="POST" class="form-control">
+    <select name="status" class="form-control" required>
+        <option value="" disabled selected>Выберите статус</option>
+        {% for availability_options in availability_options %}
+            <option value="{{ availability_options }}">{{ availability_options }}</option>
+        {% endfor %}
+    </select>
+
+     <select name="id_spare" class="form-control" required>
+        <option value="" disabled selected>Выберите запчасть</option>
+        {% for equipment in equipment %}
+            <option value="{{ equipment.id_equipment }}">{{ equipment.name }}</option>
+        {% endfor %}
+    </select>
+
+
+
+    <button class="button" type="submit"> добавить </button>
+
+</form>
+{% endblock %}

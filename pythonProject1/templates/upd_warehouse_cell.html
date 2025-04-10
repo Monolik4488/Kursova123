@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ ячейки {{cell_id}}
+{% endblock %}
+
+{% block body %}
+
+<h1>Редактирование ячейки</h1>
+<form method="post">
+    <input value= "{{warehouse.status}}" type="text" name="status" placeholder="статус" class="form-control">
+    <input value= "{{warehouse.id_spare}}" type="number" name="id_spare" placeholder="id запчасти" class="form-control">
+
+
+        <button class="button" type="submit"> изменить </button>
+
+</form>
+{% endblock %}
+

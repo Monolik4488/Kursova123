@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Редактирование оборудования
+{% endblock %}
+
+{% block body %}
+<h1>Редактирование оборудования</h1>
+<form method="POST">
+    <!-- Количество единиц -->
+    <label for="numder_of_units">Количество единиц:</label><br>
+    <input type="number" name="numder_of_units" value="{{ equipment.numder_of_units }}" required><br>
+
+    <!-- Состояние -->
+    <label for="availability">Состояние:</label><br>
+    <select name="availability" required>
+        {% for status in availability_options %}
+            <option value="{{ status }}" {% if status == equipment.availability %}selected{% endif %}>{{ status }}</option>
+        {% endfor %}
+    </select><br>
+
+    <!-- Цена за единицу -->
+    <label for="prce_per_unit">Цена за единицу:</label><br>
+    <input type="number" name="prce_per_unit" value="{{ equipment.prce_per_unit }}" required><br>
+
+    <!-- Название -->
+    <label for="name">Название:</label><br>
+    <input type="text" name="name" value="{{ equipment.name }}" required><br>
+
+    <!-- Кнопка отправки формы -->
+    <button type="submit">Обновить</button>
+</form>
+{% endblock %}

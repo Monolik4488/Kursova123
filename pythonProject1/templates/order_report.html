@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отчет о паркниге</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Отчет о заказах</h1>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>номер заказа</th>
+                    <th>фио менеджера</th>
+                    <th>фио покупателя</th>
+                    <th>наз техники</th>
+                    <th>наз запчасти</th>
+                    <th>статус</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in report_data %}
+                <tr>
+                    <td>{{ row['ном.заказа'] }}</td>
+                    <td>{{ row['фио_мен'] }}</td>
+                    <td>{{ row['фио_покуп'] }}</td>
+                    <td>{{ row['наз_тех'] }}</td>
+                    <td>{{ row['наз_запчасти'] }}</td>
+                    <td>{{ row['availability']}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('all_database') }}" class="btn btn-primary mt-3">Назад</a>
+    </div>
+</body>
+</html>

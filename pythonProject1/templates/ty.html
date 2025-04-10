@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Добавление заказа
+{% endblock %}
+
+{% block body %}
+<h1>Добавление заказа</h1>
+<form method="POST" class="form-control">
+    <!-- Продавец -->
+    <label for="Seller_id">Продавец:</label><br>
+    <input type="number" name="Seller_id" placeholder="Номер продавца" required class="form-control"><br>
+
+    <!-- Менеджер -->
+    <label for="Menager_id">Менеджер:</label><br>
+    <select name="Menager_id" required>
+        <option value="" disabled selected >Выберите менеджера</option>
+        {% for manager in managers %}
+            <option value="{{ manager.Menager_id }}">{{ manager.fio_Manager }}</option>
+        {% endfor %}
+    </select><br>
+
+    <!-- ФИО покупателя -->
+    <label for="fio_buyer">ФИО покупателя:</label><br>
+    <input type="text" name="fio_buyer" placeholder="ФИО покупателя" required class="form-control"><br>
+
+    <!-- Телефон покупателя -->
+    <label for="buyer_phone">Телефон покупателя:</label><br>
+    <input type="number" name="buyer_phone" placeholder="Телефон покупателя" required class="form-control"><br>
+
+    <!-- Выбор запчастей -->
+    <h3>Запчасти</h3>
+    {% for equipment in equipments %}
+        <label>
+            <input type="checkbox" name="id_equipment" value="{{ equipment.id_equipment }}"> {{ equipment.name }}
+            <input type="number" name="col_eq" placeholder="Количество" min="0" value="0" class="form-control">
+        </label><br>
+    {% endfor %}
+
+    <!-- Выбор техники -->
+    <h3>Техника</h3>
+    {% for spare in spares %}
+        <label>
+            <input type="checkbox" name="id_spare" value="{{ spare.id_spare }}" > {{ spare.name }}
+            <input type="number" name="col_tex" placeholder="Количество" min="0" value="0" class="form-control">
+        </label><br>
+    {% endfor %}
+
+    <!-- Статус заказа -->
+    <label for="availability">Статус:</label><br>
+    <select name="availability" required>
+        <option value="Не выдан">Не выдан</option>
+        <option value="Выдан">Выдан</option>
+    </select><br>
+
+    <!-- Кнопка отправки формы -->
+    <button type="submit" class="button">Добавить заказ</button>
+</form>
+{% endblock %}

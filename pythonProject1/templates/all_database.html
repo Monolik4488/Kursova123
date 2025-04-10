@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% block title %}
+Таблицы
+{% endblock %}
+
+{% block content %}
+<h1>Заказы</h1>
+    <details open>
+      <summary class="table-header">свернуть/развернуть</summary>
+<table>
+    <thead>
+        <tr>
+            <th>ID заказа</th>
+            <th>ID продавца</th>
+            <th>ID менеджера</th>
+            <th>ФИО клиента</th>
+            <th>Телефон клиента</th>
+            <th>ID запчасти</th>
+            <th>Кол-во</th>
+            <th>ID техники</th>
+            <th>Кол-во</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+
+       <tbody>
+         {% for order in orders %}
+
+          <tr>
+            <td>{{ order.id_order }}</td>
+            <td>{{ order.Seller_id }}</td>
+            <td>{{ order.Menager_id }}</td>
+            <td>{{ order.fio_buyer }}</td>
+            <td>{{ order.buyer_phone }}</td>
+            <!-- Запчасти -->
+                <td>
+                    {% set equipment_col_vo = col_eq | selectattr("id_order", "equalto", order.id_order) | list %}
+                    {% if equipment_col_vo %}
+                        {{ equipment_col_vo[0].id_equipment }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if equipment_col_vo %}
+                        {{ equipment_col_vo[0].col_vo }}
+                    {% else %}
+                        0
+                    {% endif %}
+                </td>
+                <!-- Техника -->
+                <td>
+                    {% set spare_col_vo = col_tex | selectattr("id_order", "equalto", order.id_order) | list %}
+                    {% if spare_col_vo %}
+                        {{ spare_col_vo[0].id_spare }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if spare_col_vo %}
+                        {{ spare_col_vo[0].col_vo }}
+                    {% else %}
+                        0
+                    {% endif %}
+                </td>
+            <td>{{ order.availability }}</td>
+            <td>
+                <!-- Ссылка для изменения статуса -->
+                <a href="{{ url_for('change_order_status_form', id_order=order.id_order) }}" class="btn btn-sm btn-secondary">Изменить статус</a>
+
+                <!-- Ссылка для удаления (только если статус "Не выдан") -->
+                {% if order.availability == "Не выдан" %}
+                    <a href="{{ url_for('delete_order', id_order=order.id_order) }}" class="btn btn-sm btn-danger" onclick="return confirm('Вы уверены?')">Удалить</a>
+                {% else %}
+                    Не доступно для удаления
+                {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+
+       </tbody>
+
+</table>
+    </details>
+
+
+<h2>Менеджеры</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID менеджера</th>
+            <th>ФИО менеджера</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for manager in manager %}
+        <tr>
+            <td>{{ manager.Menager_id }}</td>
+            <td>{{ manager.fio_Manager }}</td>
+            <td>
+                <a href="{{ url_for('update_menager', Menager_id=manager.Menager_id) }}" class="btn btn-sm btn-secondary">Редактирование</a>
+                <a href="{{ url_for('delete_menager', Menager_id=manager.Menager_id) }}" class="btn btn-sm btn-danger">Удаление</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Техника</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID техники</th>
+
+            <th>Количество единиц</th>
+            <th>Состояние</th>
+            <th>Цена за единицу</th>
+            <th>Название</th>
+
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for spare_part in spare_parts %}
+        <tr>
+            <td>{{ spare_part.id_spare }}</td>
+
+            <td>{{ spare_part.numder_units }}</td>
+            <td>{{ spare_part.availability }}</td>
+            <td>{{ spare_part.price_per_unit }}</td>
+            <td>{{ spare_part.name }}</td>
+
+            <td>
+                <a href="{{ url_for('update_spare_parts', id_spare=spare_part.id_spare) }}" class="btn btn-sm btn-secondary">Редактирование</a>
+                <a href="{{ url_for('delete_spare_parts', id_spare=spare_part.id_spare) }}" class="btn btn-sm btn-danger">Удаление</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Запчасти</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID запчасти</th>
+
+            <th>Количество единиц</th>
+            <th>Состояние</th>
+            <th>Цена за единицу</th>
+            <th>Название</th>
+
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for equipment in equipments %}
+        <tr>
+            <td>{{ equipment.id_equipment }}</td>
+
+            <td>{{ equipment.numder_of_units }}</td>
+            <td>{{ equipment.availability }}</td>
+            <td>{{ equipment.price_per_unit }}</td>
+            <td>{{ equipment.name }}</td>
+
+            <td>
+                <a href="{{ url_for('update_equipment', id_equipment=equipment.id_equipment) }}" class="btn btn-sm btn-secondary">Редактирование</a>
+                <a href="{{ url_for('delete_equipment', id_equipment=equipment.id_equipment) }}" class="btn btn-sm btn-danger">Удаление</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Ячейки склада</h2>
+<details close>
+      <summary class="table-header">свернуть/развернуть</summary>
+<table>
+    <thead>
+        <tr>
+            <th>ID ячейки</th>
+            <th>Статус</th>
+            <th>ID запчасти</th>
+
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for warehouse in warehouse %}
+        <tr>
+            <td>{{ warehouse.cell_id }}</td>
+            <td>{{ warehouse.status }}</td>
+            <td>{{ warehouse.id_equipment }}</td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+</details>
+<h2>Парковка</h2>
+<details close>
+      <summary class="table-header">свернуть/развернуть</summary>
+<table>
+    <thead>
+        <tr>
+            <th>ID парковочного места</th>
+            <th>ID техники</th>
+            <th>Статус</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for parkings in parking %}
+        <tr>
+            <td>{{ parkings.parking_id }}</td>
+            <td>{{ parkings.id_spare }}</td>
+            <td>{{ parkings.status }}</td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</details>
+
+<a href="{{ url_for('parking_report') }}" class="btn btn-secondary">Просмотреть отчет о паркинге</a>
+<a href="{{ url_for('order_report') }}" class="btn btn-secondary">Просмотреть отчет о заказах</a>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Добавление оборудования
+{% endblock %}
+
+{% block body %}
+<h2>Добавление оборудования</h2>
+<form method="POST" class="form-control">
+
+    <div>
+        <label for="numder_of_units">Количество единиц:</label>
+        <input type="number" name="numder_of_units" id="numder_of_units" required class="form-control">
+    </div>
+    <div>
+        <label for="availability">Статус:</label>
+        <select name="availability" id="availability" required >
+            {% for status in availability_options %}
+            <option value="{{ status }}">{{ status }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label for="price_per_unit">Цена за единицу:</label>
+        <input type="number" name="price_per_unit" id="price_per_unit" required class="form-control">
+    </div>
+    <div>
+        <label for="name">Название:</label>
+        <input type="text" name="name" id="name" required class="form-control"  >
+    </div>
+    <button type="submit">Добавить</button>
+</form>
+{% endblock %}

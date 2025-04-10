@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Подтверждение удаления заказа
+{% endblock %}
+
+{% block body %}
+<h1>Подтверждение удаления заказа</h1>
+
+<p>Вы уверены, что хотите удалить заказ №{{ order.id_order }}?</p>
+
+<p><strong>Информация о заказе:</strong></p>
+<ul>
+    <li>Продавец: {{ order.Seller_id }}</li>
+    <li>Менеджер: {{ order.Menager_id }}</li>
+    <li>ФИО покупателя: {{ order.fio_buyer }}</li>
+    <li>Телефон покупателя: {{ order.buyer_phone }}</li>
+    <li>ID запчасти: {{ order.id_equipment }}</li>
+    <li>ID техники: {{ order.id_spare }}</li>
+    <li>Статус: {{ order.availability }}</li>
+</ul>
+
+<form method="POST" action="{{ url_for('delete_order', id_order=order.id_order) }}">
+    <button type="submit">Удалить заказ</button>
+</form>
+
+<p><a href="/all_database">Отмена</a></p>
+{% endblock %}

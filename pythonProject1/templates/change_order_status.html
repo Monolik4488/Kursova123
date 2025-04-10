@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Изменение статуса заказа №{{ order.id_order }}
+{% endblock %}
+
+{% block body %}
+<h1>Изменение статуса заказа</h1>
+
+<form method="POST" action="{{ url_for('change_order_status', id_order=order.id_order) }}">
+    <p><strong>Текущий статус:</strong> {{ order.availability }}</p>
+
+    <label for="availability">Новый статус:</label><br>
+    <select name="availability" required>
+        <option value="" disabled selected>Выберите новый статус</option>
+        <option value="Не выдан" {% if order.availability == "Не выдан" %}selected{% endif %}>Не выдан</option>
+        <option value="Выдан" {% if order.availability == "Выдан" %}selected{% endif %}>Выдан</option>
+    </select><br><br>
+
+    <button type="submit">Изменить статус</button>
+</form>
+
+<p><a href="/all_database">Вернуться к списку заказов</a></p>
+{% endblock %}
