@@ -1,0 +1,31 @@
+
+CREATE OR REPLACE FUNCTION check_storage_availability()
+RETURNS TRIGGER AS $$
+DECLARE
+free_parking_count INTEGER;
+free_warehouse_count INTEGER;
+BEGIN
+-- Проверяем наличие свободных парковочных мест
+SELECT COUNT(*) INTO free_parking_count
+FROM "parking_space"
+WHERE status = 'Свободно';
+
+-- Проверяем наличие свободных ячеек склада
+SELECT COUNT(*) INTO free_warehouse_count
+FROM "warehouse_cell"
+WHERE status = 'Свободно';
+
+-- Если нет свободных парковочных мест
+IF TG_TABLE_NAME = 'spare_parts' AND free_parking_count = 0 THEN
+RAISE EXCEPTION 'Нет свободных парковочных мест. Парковка полностью занята.';
+END IF;
+
+-- Если нет свободных ячеек склада
+IF TG_TABLE_NAME = 'equipment' AND free_warehouse_count = 0 THEN
+RAISE EXCEPTION 'Нет свободных ячеек на складе. Склад полностью занят.';
+END IF;
+
+-- Если есть свободные места, разрешаем вставку
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;

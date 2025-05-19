@@ -1,0 +1,261 @@
+
+/*==============================================================*/
+/* Table: "1"                                                   */
+/*==============================================================*/
+create table "1" (
+   id_id_spare          INT4                 not null,
+   manager_id           INT4                 not null,
+   number_of_units      INT4                 null,
+   availability         VARCHAR(1024)        null,
+   price_per_unit       INT4                 null,
+   name                 VARCHAR(1024)        null,
+   constraint PK_1 primary key (id_id_spare)
+);
+
+/*==============================================================*/
+/* Index: "1_PK"                                                */
+/*==============================================================*/
+create unique index "1_PK" on "1" (
+id_id_spare
+);
+
+/*==============================================================*/
+/* Index: "Register(e)_FK"                                      */
+/*==============================================================*/
+create  index "Register(e)_FK" on "1" (
+manager_id
+);
+
+/*==============================================================*/
+/* Table: Equipment                                             */
+/*==============================================================*/
+create table Equipment (
+   id_equipment         INT4                 not null,
+   manager_id           INT4                 not null,
+   number_units         INT4                 null,
+   availability         VARCHAR(1024)        null,
+   "price_per_ unit"    INT4                 null,
+   name                 VARCHAR(1024)        null,
+   constraint PK_EQUIPMENT primary key (id_equipment)
+);
+
+/*==============================================================*/
+/* Index: Equipment_PK                                          */
+/*==============================================================*/
+create unique index Equipment_PK on Equipment (
+id_equipment
+);
+
+/*==============================================================*/
+/* Index: "Register(z)_FK"                                      */
+/*==============================================================*/
+create  index "Register(z)_FK" on Equipment (
+manager_id
+);
+
+/*==============================================================*/
+/* Table: Manager                                               */
+/*==============================================================*/
+create table Manager (
+   manager_id           INT4                 not null,
+   manager_FIO          VARCHAR(1024)        null,
+   constraint PK_MANAGER primary key (manager_id)
+);
+
+/*==============================================================*/
+/* Index: Manager_PK                                            */
+/*==============================================================*/
+create unique index Manager_PK on Manager (
+manager_id
+);
+
+/*==============================================================*/
+/* Table: "Order"                                               */
+/*==============================================================*/
+create table "Order" (
+   id_order             INT4                 not null,
+   manager_id           INT4                 null,
+   fio_buyer            VARCHAR(1024)        null,
+   buyer_phone          INT4                 null,
+   Seller_id            INT4                 null,
+   availability         VARCHAR(1024)        null,
+   id_spare             INT4                 null,
+   id_equipment         INT4                 null,
+   constraint PK_ORDER primary key (id_order)
+);
+
+/*==============================================================*/
+/* Index: Order_PK                                              */
+/*==============================================================*/
+create unique index Order_PK on "Order" (
+id_order
+);
+
+/*==============================================================*/
+/* Index: Issue_FK                                              */
+/*==============================================================*/
+create  index Issue_FK on "Order" (
+manager_id
+);
+
+/*==============================================================*/
+/* Table: Order_eq                                              */
+/*==============================================================*/
+create table Order_eq (
+   id_equipment         INT4                 not null,
+   id_order             INT4                 not null,
+   col_vo               INT4                 null,
+   id_order_eq          INT4                 not null,
+   constraint PK_ORDER_EQ primary key (id_equipment, id_order, id_order_eq)
+);
+
+/*==============================================================*/
+/* Index: Order_eq_PK                                           */
+/*==============================================================*/
+create unique index Order_eq_PK on Order_eq (
+id_equipment,
+id_order,
+id_order_eq
+);
+
+/*==============================================================*/
+/* Index: Contains3_FK                                          */
+/*==============================================================*/
+create  index Contains3_FK on Order_eq (
+id_order
+);
+
+/*==============================================================*/
+/* Index: Contains4_FK                                          */
+/*==============================================================*/
+create  index Contains4_FK on Order_eq (
+id_equipment
+);
+
+/*==============================================================*/
+/* Table: Order_tex                                             */
+/*==============================================================*/
+create table Order_tex (
+   id_id_spare          INT4                 not null,
+   id_order             INT4                 not null,
+   col_vo               INT4                 null,
+   id_order_tex         INT4                 not null,
+   constraint PK_ORDER_TEX primary key (id_id_spare, id_order, id_order_tex)
+);
+
+/*==============================================================*/
+/* Index: Order_tex_PK                                          */
+/*==============================================================*/
+create unique index Order_tex_PK on Order_tex (
+id_id_spare,
+id_order,
+id_order_tex
+);
+
+/*==============================================================*/
+/* Index: Contains2_FK                                          */
+/*==============================================================*/
+create  index Contains2_FK on Order_tex (
+id_order
+);
+
+/*==============================================================*/
+/* Index: Contains1_FK                                          */
+/*==============================================================*/
+create  index Contains1_FK on Order_tex (
+id_id_spare
+);
+
+/*==============================================================*/
+/* Table: Parking_space                                         */
+/*==============================================================*/
+create table Parking_space (
+   parking_id           INT4                 not null,
+   id_id_spare          INT4                 not null,
+   status               VARCHAR(1024)        null,
+   constraint PK_PARKING_SPACE primary key (parking_id)
+);
+
+/*==============================================================*/
+/* Index: Parking_space_PK                                      */
+/*==============================================================*/
+create unique index Parking_space_PK on Parking_space (
+parking_id
+);
+
+/*==============================================================*/
+/* Index: "Occupy(p)_FK"                                        */
+/*==============================================================*/
+create  index "Occupy(p)_FK" on Parking_space (
+id_id_spare
+);
+
+/*==============================================================*/
+/* Table: Warehouse_cell                                        */
+/*==============================================================*/
+create table Warehouse_cell (
+   cell_id              INT4                 not null,
+   id_equipment         INT4                 not null,
+   status               VARCHAR(1024)        null,
+   constraint PK_WAREHOUSE_CELL primary key (cell_id)
+);
+
+/*==============================================================*/
+/* Index: Warehouse_cell_PK                                     */
+/*==============================================================*/
+create unique index Warehouse_cell_PK on Warehouse_cell (
+cell_id
+);
+
+/*==============================================================*/
+/* Index: Occupy_FK                                             */
+/*==============================================================*/
+create  index Occupy_FK on Warehouse_cell (
+id_equipment
+);
+
+alter table "1"
+   add constraint "FK_1_REGISTER(_MANAGER" foreign key (manager_id)
+      references Manager (manager_id)
+      on delete restrict on update restrict;
+
+alter table Equipment
+   add constraint "FK_EQUIPMEN_REGISTER(_MANAGER" foreign key (manager_id)
+      references Manager (manager_id)
+      on delete restrict on update restrict;
+
+alter table "Order"
+   add constraint FK_ORDER_ISSUE_MANAGER foreign key (manager_id)
+      references Manager (manager_id)
+      on delete restrict on update restrict;
+
+alter table Order_eq
+   add constraint FK_ORDER_EQ_CONTAINS3_ORDER foreign key (id_order)
+      references "Order" (id_order)
+      on delete restrict on update restrict;
+
+alter table Order_eq
+   add constraint FK_ORDER_EQ_CONTAINS4_EQUIPMEN foreign key (id_equipment)
+      references Equipment (id_equipment)
+      on delete restrict on update restrict;
+
+alter table Order_tex
+   add constraint FK_ORDER_TE_CONTAINS1_1 foreign key (id_id_spare)
+      references "1" (id_id_spare)
+      on delete restrict on update restrict;
+
+alter table Order_tex
+   add constraint FK_ORDER_TE_CONTAINS2_ORDER foreign key (id_order)
+      references "Order" (id_order)
+      on delete restrict on update restrict;
+
+alter table Parking_space
+   add constraint "FK_PARKING__OCCUPY(P)_1" foreign key (id_id_spare)
+      references "1" (id_id_spare)
+      on delete restrict on update restrict;
+
+alter table Warehouse_cell
+   add constraint FK_WAREHOUS_OCCUPY_EQUIPMEN foreign key (id_equipment)
+      references Equipment (id_equipment)
+      on delete restrict on update restrict;
+

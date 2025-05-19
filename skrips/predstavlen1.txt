@@ -1,0 +1,15 @@
+CREATE VIEW simplified_orders AS
+SELECT
+    o.id_order AS ид_заказа,
+    o.fio_buyer AS ФИО_покупателя,
+    m.fio_Manager AS ФИО_менеджера,
+    sp.name AS "Название техники",
+    eq.name AS "Название запчасти",
+    o.availability AS статус
+FROM
+    "Order" o
+LEFT JOIN "Manager" m ON o.Menager_id = m.Menager_id
+LEFT JOIN "order_tex" ot ON o.id_order = ot.id_order
+LEFT JOIN "Spare_parts" sp ON ot.id_spare = sp.id_spare
+LEFT JOIN "order_eq" oe ON o.id_order = oe.id_order
+LEFT JOIN "Equipment" eq ON oe.id_equipment = eq.id_equipment;

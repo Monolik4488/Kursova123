@@ -1,0 +1,22 @@
+CREATE VIEW place_info AS
+SELECT
+    p.parking_id AS Ид_места,
+    p.status AS Статус,
+    sp.name AS название,
+    sp.price_per_unit AS цена_за_еденицу,
+    sp.numder_units AS количество
+FROM
+    parking_space p
+LEFT JOIN Spare_parts sp ON p.id_spare = sp.id_spare
+
+UNION ALL
+
+SELECT
+    wc.cell_id AS Ид_места,
+    wc.status AS Статус,
+    eq.name AS название,
+    eq.prce_per_unit AS цена_за_еденицу,
+    eq.numder_of_units AS количество
+FROM
+    warehouse_cell wc
+LEFT JOIN Equipment eq ON wc.id_equipment = eq.id_equipment;

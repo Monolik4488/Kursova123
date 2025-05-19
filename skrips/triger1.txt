@@ -1,0 +1,13 @@
+-- Функция для проверки существования менеджера
+CREATE OR REPLACE FUNCTION check_manager_exists()
+RETURNS TRIGGER AS $$
+BEGIN
+-- Проверяем, существует ли менеджер с указанным Menager_id
+IF NOT EXISTS (SELECT 1 FROM "Manager" WHERE "Menager_id" = NEW."Menager_id") THEN
+RAISE EXCEPTION 'Менеджер с ID % не существует', NEW."Menager_id";
+END IF;
+
+-- Если менеджер существует, разрешаем вставку
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;

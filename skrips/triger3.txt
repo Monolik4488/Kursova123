@@ -1,0 +1,36 @@
+-- Создание функции-триггера
+CREATE OR REPLACE FUNCTION check_availability()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Проверка наличия запчастей на складе
+    IF NEW.id_equipment IS NOT NULL THEN
+        IF NOT EXISTS (
+            SELECT 1
+            FROM warehouse_cell
+            WHERE id_equipment = NEW.id_equipment AND status = 'available'
+        ) THEN
+            RAISE EXCEPTION 'Запчасть с ID % отсутствует на складе!', NEW.id_equipment;
+        END IF;
+    END IF;
+
+    -- Проверка наличия техники на парковке
+    IF NEW.id_spare IS NOT NULL THEN
+        IF NOT EXISTS (
+            SELECT 1
+            FROM parking_space
+            WHERE id_spare = NEW.id_spare AND status = 'available'
+        ) THEN
+            RAISE EXCEPTION 'Техника с ID % отсутствует на парковке!', NEW.id_spare;
+        END IF;
+    END IF;
+
+    -- Если все проверки пройдены, разрешаем вставку
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Создание триггера
+CREATE TRIGGER trg_check_availability
+BEFORE INSERT ON "Order"
+FOR EACH ROW
+EXECUTE FUNCTION check_availability();
